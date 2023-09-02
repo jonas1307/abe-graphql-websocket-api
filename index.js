@@ -1,6 +1,16 @@
+import express from "express";
+import http from "http";
+import { Server } from "socket.io";
 import { ApolloServer } from "@apollo/server";
 import { startStandaloneServer } from "@apollo/server/standalone";
 import axios from "axios";
+const app = express();
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: "http://localhost:3001",
+  },
+});
 
 const typeDefs = `#graphql
 
@@ -47,6 +57,7 @@ const resolvers = {
         "https://6ooimsri26.execute-api.us-east-1.amazonaws.com/polls",
         { question, options }
       );
+      io.emit("poll-insert", res.data);
       return res.data;
     },
     addVote: async (_, { pollId, label }) => {
@@ -54,18 +65,31 @@ const resolvers = {
         "https://6ooimsri26.execute-api.us-east-1.amazonaws.com/votes",
         { pollId, label }
       );
+      io.emit("poll-update", res.data);
       return res.data;
     },
   },
 };
 
-const server = new ApolloServer({
+const apolloServer = new ApolloServer({
   typeDefs,
   resolvers,
 });
 
-const { url } = await startStandaloneServer(server, {
+const { url } = await startStandaloneServer(apolloServer, {
   listen: { port: 4000 },
 });
 
 console.log(`🚀 Server ready at: ${url}`);
+
+app.get("/", (req, res) => {
+  res.json({ status: "OK" });
+});
+
+io.on("connection", (socket) => {
+  console.log("a user connected");
+});
+
+server.listen(3000, () => {
+  console.log("listening on *:3000");
+});
