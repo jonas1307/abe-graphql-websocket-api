@@ -8,7 +8,7 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:3001",
+    origin: "http://localhost:3000",
   },
 });
 
@@ -90,6 +90,6 @@ io.on("connection", (socket) => {
   console.log("a user connected");
 });
 
-server.listen(3000, () => {
-  console.log("listening on *:3000");
+server.listen(5000, () => {
+  console.log("listening on *:5000");
 });
