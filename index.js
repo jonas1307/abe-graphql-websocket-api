@@ -39,13 +39,13 @@ const resolvers = {
   Query: {
     polls: async () => {
       const res = await axios.get(
-        "https://6ooimsri26.execute-api.us-east-1.amazonaws.com/polls"
+        "https://gb3o8jhoql.execute-api.us-east-1.amazonaws.com/polls"
       );
       return res.data;
     },
     pollById: async (_, { pollId }) => {
       const res = await axios.get(
-        `https://6ooimsri26.execute-api.us-east-1.amazonaws.com/polls/${pollId}`
+        `https://gb3o8jhoql.execute-api.us-east-1.amazonaws.com/polls/${pollId}`
       );
       return res.data;
     },
@@ -53,7 +53,7 @@ const resolvers = {
   Mutation: {
     addPoll: async (_, { question, options }) => {
       const res = await axios.post(
-        "https://6ooimsri26.execute-api.us-east-1.amazonaws.com/polls",
+        "https://gb3o8jhoql.execute-api.us-east-1.amazonaws.com/polls",
         { question, options }
       );
       io.emit("poll-insert", res.data);
@@ -61,7 +61,7 @@ const resolvers = {
     },
     addVote: async (_, { pollId, label }) => {
       const res = await axios.post(
-        "https://6ooimsri26.execute-api.us-east-1.amazonaws.com/votes",
+        "https://gb3o8jhoql.execute-api.us-east-1.amazonaws.com/votes",
         { pollId, label }
       );
       io.emit("poll-update", res.data);
