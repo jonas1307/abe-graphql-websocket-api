@@ -32,6 +32,7 @@ const typeDefs = `#graphql
   type Mutation {
     addPoll(question: String, options: [String]): Poll
     addVote(pollId: String, label: String): Poll
+    deletePoll(pollId: String): Poll
   }
 `;
 
@@ -75,6 +76,13 @@ const resolvers = {
         config
       );
       io.emit("poll-update", res.data);
+      return res.data;
+    },
+    deletePoll: async (_, { pollId }) => {
+      const res = await axios.delete(
+        `https://rp6w0qdem1.execute-api.us-east-1.amazonaws.com/polls/${pollId}`,
+        config
+      );
       return res.data;
     },
   },
