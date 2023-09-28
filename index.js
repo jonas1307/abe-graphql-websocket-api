@@ -35,17 +35,25 @@ const typeDefs = `#graphql
   }
 `;
 
+const config = {
+  headers: {
+    Authorization: "Bearer 1",
+  },
+};
+
 const resolvers = {
   Query: {
     polls: async () => {
       const res = await axios.get(
-        "https://rp6w0qdem1.execute-api.us-east-1.amazonaws.com/polls"
+        "https://rp6w0qdem1.execute-api.us-east-1.amazonaws.com/polls",
+        config
       );
       return res.data;
     },
     pollById: async (_, { pollId }) => {
       const res = await axios.get(
-        `https://rp6w0qdem1.execute-api.us-east-1.amazonaws.com/polls/${pollId}`
+        `https://rp6w0qdem1.execute-api.us-east-1.amazonaws.com/polls/${pollId}`,
+        config
       );
       return res.data;
     },
@@ -54,7 +62,8 @@ const resolvers = {
     addPoll: async (_, { question, options }) => {
       const res = await axios.post(
         "https://rp6w0qdem1.execute-api.us-east-1.amazonaws.com/polls",
-        { question, options }
+        { question, options },
+        config
       );
       io.emit("poll-insert", res.data);
       return res.data;
@@ -62,7 +71,8 @@ const resolvers = {
     addVote: async (_, { pollId, label }) => {
       const res = await axios.post(
         "https://rp6w0qdem1.execute-api.us-east-1.amazonaws.com/votes",
-        { pollId, label }
+        { pollId, label },
+        config
       );
       io.emit("poll-update", res.data);
       return res.data;
