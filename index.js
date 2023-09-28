@@ -69,8 +69,8 @@ const resolvers = {
       return res.data;
     },
     addVote: async (_, { pollId, label }) => {
-      const res = await axios.post(
-        "https://rp6w0qdem1.execute-api.us-east-1.amazonaws.com/votes",
+      const res = await axios.put(
+        "https://rp6w0qdem1.execute-api.us-east-1.amazonaws.com/polls",
         { pollId, label },
         config
       );
